@@ -9,14 +9,15 @@ inputData<- read.csv("hw1_data.csv")
   #Q11
 print("Answer for q11")
 
-temp<- names(inputData)
-print(temp)
 
 #Q12
 print("Answer for q12")
 
 temp<- inputData[1:2,]
 print(temp)
+
+tapply(iris,Species,mean)
+lapply(s, function(x) colMeans(x[,c("Sepal.Length","Petal.Length")]))
 
 #Q13
 print("Answer for q13")
