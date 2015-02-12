@@ -6,8 +6,11 @@ rankall <- function(outcome, num = "best") {
   ## Extract stateList
   stateList<- outcomeData["State"]
   stateList<- unique(stateList)
+  stateList<- stateList[order(stateList$State),]
   stateList<- sapply(stateList,identical)
   stateList<- as.character(stateList)
+
+  
   
   outcomeList<- c("heart attack","heart failure", "pneumonia")
   
@@ -26,11 +29,12 @@ rankall <- function(outcome, num = "best") {
   if(flag == FALSE)
     stop ('invalid outcome')
   
-  result<-data.frame(hospital=character(), state=character())
+  result<- data.frame()
   
   
   ##Now get best ranked hospital for each state
-  resultctr<- 1
+
+  hspnames<- numeric()
   
   for(st in stateList)
   {
@@ -40,10 +44,10 @@ rankall <- function(outcome, num = "best") {
     hospinfo<- outcomeData[outcomeData$State == st,]
     hospinfo
     
-    ##Logic to derive best hospital from state's hospitals info
+    #Logic to derive best hospital from state's hospitals info
     
-    ##Sort hospinfo based on hospital and mortality rate params
-    ##But before sorting, filter out reqd data
+    #Sort hospinfo based on hospital and mortality rate params
+    #But before sorting, filter out reqd data
     
     if(outcome == "heart attack")
     {
@@ -60,20 +64,25 @@ rankall <- function(outcome, num = "best") {
       fhospinfo<- hospinfo[,c(2,23)] 
     }
     
-    ##Rename column names to avoid confusion
+    #Rename column names to avoid confusion
     names(fhospinfo)<- c("name","death")
     
-    ##Call helper which directly gives reqd hospital name
+    #Call helper which directly gives reqd hospital name
     hospname<- rankallhelper(fhospinfo,num)
     
-    ##Now create a row and add to data frame
-    row<- c(hospname,st)
-    rbind(result,setNames(as.list(row), nm=names(result)))
+    hspnames<- c(hspnames,hospname)
     
   }
- # names(result)<- c("hospital","state")
-  result
+
+ 
+ hspnames<- as.data.frame(hspnames)
+ names(hspnames)<- "hosptial"
   
+ stateList<- as.data.frame(stateList)
+ names(stateList)<- "state"
+ 
+ result<- cbind(hspnames,stateList)
+ result
 }
 
 identical<- function(x){x}
