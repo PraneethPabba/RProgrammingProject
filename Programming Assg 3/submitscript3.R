@@ -247,13 +247,16 @@ submit <- local({
                                 email <- cred$email
                                 password <- cred$passwd
                                 
+                                yn <- c("Yes, go ahead!", 
+                                        "No, I need to change something.")
+                                
                                 pretty_out("Is the following information correct?",
                                            skip_after=TRUE)
+                                
                                 message("Course ID: ", courseid,
                                         "\nSubmission login (email): ", email, 
                                         "\nSubmission password: ", password)
-                                yn <- c("Yes, go ahead!", 
-                                        "No, I need to change something.")
+                                
                                 confirmed <- identical(select.list(yn, graphics=FALSE), yn[1])
                                 if(!confirmed) need2fix <- TRUE
                         }
